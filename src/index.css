@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Fragment Mono", monospace;
+  --color-canvas: #F7F7F5;
+  --color-card-light: #FFFFFF;
+  --color-card-warm: #F2F0E9;
+  --color-border-subtle: #EEEEEE;
+  --color-dark-text: #111111;
+  --color-muted-text: #666666;
+  --color-brand-teal: #015870;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: #F7F7F5;
+  color: #111111;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans, "Inter", sans-serif);
+  background-color: #F7F7F5;
+  color: #111111;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display, "DM Sans", sans-serif);
+}
+
+.font-display {
+  font-family: "DM Sans", sans-serif;
+}
+
+.font-mono-code {
+  font-family: "Fragment Mono", monospace;
+}
+
+/* Kiln-style hairline border */
+.border-hairline {
+  border: 1px solid #EEEEEE;
+}
+
+.bg-grid-blueprint {
+  background-image: radial-gradient(rgba(17, 17, 17, 0.07) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Tactile Kiln paper shadow with crisp bottom border definition */
+.shadow-kiln {
+  box-shadow: 
+    0 4px 16px -2px rgba(0, 0, 0, 0.07), 
+    0 2px 6px -1px rgba(0, 0, 0, 0.05),
+    0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+.shadow-kiln-hover {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.shadow-kiln-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 28px -4px rgba(0, 0, 0, 0.09), 
+    0 4px 10px -2px rgba(0, 0, 0, 0.05),
+    0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+::selection {
+  background-color: #015870;
+  color: #FFFFFF;
+}
