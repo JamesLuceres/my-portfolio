@@ -1037,8 +1037,6 @@ function App() {
                   <LinkedinIcon className="w-4 h-4 text-[#015870]" />
                   <span>LinkedIn</span>
                 </a>
-                <span>•</span>
-                <span className="text-[#888888]">+63 961 072 8014</span>
               </div>
             </div>
           </section>
