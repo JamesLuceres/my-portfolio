@@ -454,7 +454,7 @@ function App() {
                 </h1>
                 
                 <p className="text-base sm:text-lg text-[#555555] leading-relaxed max-w-xl mb-8 mx-auto md:mx-0">
-                  Associate Solutions Engineer at <span className="font-semibold text-[#111111]">BrainCX AI</span> and Computer Science graduate from UP Tacloban. Experienced in building conversational AI solutions, high-concurrency real-time WebSocket engines, decentralized Web3 payment services, and resilient enterprise applications.
+                  Associate Solutions Engineer at <span className="font-semibold text-[#111111]">BrainCX AI</span> and Computer Science graduate from the University of the Philippines. Experienced in building conversational AI solutions, high-concurrency real-time WebSocket engines, decentralized Web3 payment services, and resilient enterprise applications.
                 </p>
 
                 {/* CTAs */}
@@ -553,7 +553,7 @@ function App() {
                     </div>
                     <div className="p-2.5 rounded-xl bg-[#F7F7F5] border border-[#EEEEEE]">
                       <span className="text-[10px] text-[#888888] block uppercase">Education</span>
-                      <span className="font-semibold text-[#111111]">UP Tacloban College</span>
+                      <span className="font-semibold text-[#111111]">University of the Philippines</span>
                     </div>
                     <div className="p-2.5 rounded-xl bg-[#F7F7F5] border border-[#EEEEEE]">
                       <span className="text-[10px] text-[#888888] block uppercase">Core Backend</span>
@@ -1085,7 +1085,7 @@ function App() {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-[#888888]">Company:</span>
-                        <span className="font-semibold text-[#111111]">BrainCX AI (Oct 2026)</span>
+                        <span className="font-semibold text-[#111111]">BrainCX AI (Present)</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-[#888888]">Degree:</span>
