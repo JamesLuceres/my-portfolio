@@ -549,7 +549,7 @@ function App() {
                   <div className="grid grid-cols-2 gap-2 text-xs font-mono-code mb-5">
                     <div className="p-2.5 rounded-xl bg-[#F7F7F5] border border-[#EEEEEE]">
                       <span className="text-[10px] text-[#888888] block uppercase">Current Role</span>
-                      <span className="font-semibold text-[#111111]">BrainCX AI (2026)</span>
+                      <span className="font-semibold text-[#111111]">Solutions Engineer</span>
                     </div>
                     <div className="p-2.5 rounded-xl bg-[#F7F7F5] border border-[#EEEEEE]">
                       <span className="text-[10px] text-[#888888] block uppercase">Education</span>
@@ -1081,7 +1081,7 @@ function App() {
                     <div className="w-full space-y-2 text-xs font-mono-code text-[#555555]">
                       <div className="flex justify-between">
                         <span className="text-[#888888]">Current Role:</span>
-                        <span className="font-semibold text-[#015870]">Assoc. Solutions Engineer</span>
+                        <span className="font-semibold text-[#015870]">Solutions Engineer</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-[#888888]">Company:</span>
