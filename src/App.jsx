@@ -20,6 +20,11 @@ import {
 } from "lucide-react";
 import chatpayImg from "./assets/chatpay.png";
 import agrivetImg from "./assets/agrivet-pos.png";
+import agrivetCashierImg from "./assets/agrivet-cashier.png";
+import agrivetInventoryImg from "./assets/agrivet-inventory.png";
+import agrivetCreditImg from "./assets/agrivet-credit.png";
+import agrivetReportsImg from "./assets/agrivet-reports.png";
+import agrivetLoginImg from "./assets/agrivet-login.png";
 import tradelensImg from "./assets/tradelens.png";
 import divisionImg from "./assets/division-ims.png";
 import profileImg from "./assets/profile.jpg";
@@ -70,23 +75,31 @@ const PROJECTS = [
     role: "Freelance Full-Stack Project",
     company: "Nichole Agrivet (2026)",
     category: "Full-Stack Enterprise & POS",
-    badge: "Vue 3 • Django REST • PostgreSQL",
+    badge: "Vue 3 • Django REST • Capacitor APK",
     title: "Nichole Agrivet POS & Inventory System",
     githubUrl: "https://github.com/JamesLuceres/Agrivet-Inventory-System",
-    subtitle: "Complete Point-of-Sale and inventory management system with dual-unit tracking and customer credit ledger.",
-    description: "Built for Nichole Agrivet to modernize agricultural retail operations. Solves critical retail challenges by tracking inventory simultaneously in bulk wholesale units (sacks/boxes) and retail units (kilos/packs), alongside an integrated customer credit ledger ('Utang') to manage buyer accounts and automated monthly profit analytics.",
+    subtitle: "Full-stack & standalone Android tablet POS with dual-unit stock conversion, customer credit ('Utang') ledger, and PDF/Excel analytics.",
+    description: "Built and deployed for Nichole Agrivet to modernize agricultural retail operations across web and standalone Android tablets (Capacitor APK). Solves critical store challenges by tracking inventory simultaneously in bulk wholesale units (sacks/boxes) and retail units (kilos/packs), paired with multi-tender POS checkout (Cash, GCash, Credit), an integrated customer 'Utang' ledger, and automated PDF/Excel financial reporting.",
     image: agrivetImg,
-    highlights: [
-      "Dual-unit inventory conversion logic seamlessly linking bulk supplies to fractional retail sales with stock warning thresholds.",
-      "Customer credit ledger module ('Utang') logging outstanding balances, payment histories, and automated credit limit enforcement.",
-      "Fast cashier checkout interface featuring dynamic discount application and instant barcode receipt generation.",
-      "Automated monthly profit margin reporting and revenue analytics powered by PostgreSQL and Django REST Framework."
+    gallery: [
+      { label: "Live Dashboard", src: agrivetImg },
+      { label: "POS Cashier", src: agrivetCashierImg },
+      { label: "Dual-Unit Inventory", src: agrivetInventoryImg },
+      { label: "Credit ('Utang') Ledger", src: agrivetCreditImg },
+      { label: "Reports & Analytics", src: agrivetReportsImg },
+      { label: "Tablet Terminal Login", src: agrivetLoginImg }
     ],
-    techStack: ["Vue.js 3", "Django REST Framework", "PostgreSQL", "Tailwind CSS", "Pinia", "Python"],
+    highlights: [
+      "Dual-unit inventory engine seamlessly converting bulk supplies (1 Sack = 50 Kilos) to fractional retail sales with real-time low-stock alerts.",
+      "Touch-optimized POS Cashier supporting Cash, GCash, and Charge-to-Account checkout with instant receipt generation.",
+      "Customer Credit Tracker ('Utang' Log) managing individual buyer ledgers, 'Bayad' payment settlements, and account histories.",
+      "Packaged as both a Django REST + PostgreSQL web platform and a 100% offline-capable Android Tablet APK via Capacitor with PDF/Excel report exports."
+    ],
+    techStack: ["Vue.js 3", "Quasar Framework", "Django REST Framework", "Capacitor (Android APK)", "PostgreSQL", "Tailwind CSS", "Pinia", "Python"],
     stats: [
-      { label: "Database", val: "PostgreSQL" },
-      { label: "Architecture", val: "Django REST API" },
-      { label: "UI Layer", val: "Vue 3 + Tailwind" }
+      { label: "Deployment", val: "Web + Android APK" },
+      { label: "Architecture", val: "Django REST + Offline" },
+      { label: "UI Layer", val: "Vue 3 + Quasar" }
     ]
   },
   {
@@ -181,8 +194,13 @@ const COMPETENCIES = [
 
 function App() {
   const [activeProject, setActiveProject] = useState(null);
+  const [activeGalleryIdx, setActiveGalleryIdx] = useState(0);
   const [copied, setCopied] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    setActiveGalleryIdx(0);
+  }, [activeProject]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -578,13 +596,16 @@ function App() {
 
                     <div 
                       onClick={() => setActiveProject(PROJECTS[1])}
-                      className="rounded-xl overflow-hidden border border-[#D6D4CD] bg-[#F7F7F5] cursor-pointer group"
+                      className="relative rounded-xl overflow-hidden border border-[#D6D4CD] bg-[#F7F7F5] cursor-pointer group"
                     >
                       <img
                         src={PROJECTS[1].image}
                         alt={PROJECTS[1].title}
-                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
+                        className="w-full h-48 object-cover object-top group-hover:scale-105 transition-transform duration-500"
                       />
+                      <span className="absolute bottom-2.5 right-2.5 px-2.5 py-1 rounded-full bg-[#111111]/85 backdrop-blur-sm text-white text-[10px] font-mono-code font-medium shadow-sm">
+                        6 Screens • Click to preview
+                      </span>
                     </div>
 
                     <div className="space-y-2 pt-1">
@@ -1121,13 +1142,32 @@ function App() {
                   </p>
                 </div>
 
-                {/* Screenshot Frame */}
-                <div className="rounded-2xl overflow-hidden border border-[#D6D4CD] bg-[#F7F7F5]">
-                  <img
-                    src={activeProject.image}
-                    alt={activeProject.title}
-                    className="w-full h-auto max-h-[380px] object-contain mx-auto"
-                  />
+                {/* Screenshot Frame & Interactive Gallery */}
+                <div className="space-y-3">
+                  <div className="rounded-2xl overflow-hidden border border-[#D6D4CD] bg-[#F7F7F5]">
+                    <img
+                      src={activeProject.gallery ? activeProject.gallery[activeGalleryIdx]?.src : activeProject.image}
+                      alt={activeProject.title}
+                      className="w-full h-auto max-h-[380px] object-contain mx-auto transition-all duration-200"
+                    />
+                  </div>
+                  {activeProject.gallery && (
+                    <div className="flex items-center gap-2 overflow-x-auto pb-1">
+                      {activeProject.gallery.map((item, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setActiveGalleryIdx(idx)}
+                          className={`px-3 py-1.5 rounded-full text-[11px] font-mono-code whitespace-nowrap transition-all border ${
+                            activeGalleryIdx === idx
+                              ? "bg-[#111111] text-white border-[#111111] font-semibold shadow-sm"
+                              : "bg-[#F7F7F5] text-[#555555] border-[#D6D4CD] hover:bg-[#EEEEEE] hover:text-[#111111]"
+                          }`}
+                        >
+                          {item.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 {/* Architecture & Highlights */}
