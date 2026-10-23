@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useScroll, useSpring, useTransform } from "framer-motion";
 import { 
   ArrowUpRight, 
   CheckCircle2, 
@@ -192,26 +192,120 @@ const COMPETENCIES = [
   }
 ];
 
+const EASE_OUT_EXPO = [0.16, 1, 0.3, 1];
+
+const fadeUpVariant = {
+  hidden: { opacity: 0, y: 24 },
+  visible: (delay = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.65, ease: EASE_OUT_EXPO, delay }
+  })
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.05 }
+  }
+};
+
+const staggerItem = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: EASE_OUT_EXPO }
+  }
+};
+
+function ParallaxPreview({ src, alt, className, badgeText, overlayText, onClick }) {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  });
+  const y = useTransform(scrollYProgress, [0, 1], ["-3%", "3%"]);
+
+  return (
+    <div
+      ref={ref}
+      onClick={onClick}
+      className="relative group rounded-2xl overflow-hidden border border-[#D6D4CD] bg-[#F7F7F5] cursor-pointer"
+    >
+      <motion.img
+        src={src}
+        alt={alt}
+        style={{ y }}
+        className={className}
+      />
+      {badgeText && (
+        <span className="absolute bottom-3 right-3 px-3 py-1 rounded-full bg-[#111111]/85 backdrop-blur-sm text-white text-[11px] font-mono-code font-medium shadow-sm z-10">
+          {badgeText}
+        </span>
+      )}
+      {overlayText && (
+        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center z-10">
+          <span className="px-4 py-2 rounded-full bg-white text-[#111111] text-xs font-semibold shadow-lg">
+            {overlayText}
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function App() {
   const [activeProject, setActiveProject] = useState(null);
   const [activeGalleryIdx, setActiveGalleryIdx] = useState(0);
   const [copied, setCopied] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const [activeSection, setActiveSection] = useState("");
+  const [typedRole, setTypedRole] = useState("");
+
+  const fullRoleString = '"Associate Solutions Engineer @ BrainCX AI (Oct 2026 – Present)"';
+
+  // Spring-physics top scroll progress bar
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 110,
+    damping: 28,
+    restDelta: 0.001
+  });
 
   useEffect(() => {
     setActiveGalleryIdx(0);
   }, [activeProject]);
 
+  // Terminal typewriter animation on mount
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-      setScrollProgress(progress);
+    let idx = 0;
+    const interval = setInterval(() => {
+      idx += 1;
+      setTypedRole(fullRoleString.slice(0, idx));
+      if (idx >= fullRoleString.length) clearInterval(interval);
+    }, 24);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Active section scroll spy
+  useEffect(() => {
+    const handleScrollSpy = () => {
+      const sections = ["work", "competencies", "about", "contact"];
+      const scrollPos = window.scrollY + 240;
+      let current = "";
+      for (const id of sections) {
+        const el = document.getElementById(id);
+        if (el && el.offsetTop <= scrollPos) {
+          current = id;
+        }
+      }
+      setActiveSection(current);
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScrollSpy, { passive: true });
+    handleScrollSpy();
+    return () => window.removeEventListener("scroll", handleScrollSpy);
   }, []);
 
   // Close modal on Escape key
@@ -231,10 +325,10 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#F0EFEB] text-[#111111] font-sans selection:bg-[#015870] selection:text-white bg-grid-blueprint">
-      {/* Top Scroll Indicator */}
-      <div 
-        className="fixed top-0 left-0 h-[2px] bg-[#015870] z-50 transition-all duration-75"
-        style={{ width: `${scrollProgress}%` }}
+      {/* Top Spring-Smoothed Scroll Indicator */}
+      <motion.div 
+        className="fixed top-0 left-0 right-0 h-[3px] bg-[#015870] z-50 origin-left"
+        style={{ scaleX }}
       />
 
       {/* Central Framed Canvas with Continuous Vertical Hairline Borders */}
@@ -267,9 +361,48 @@ function App() {
               </div>
 
               <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-[#555555]">
-                <a href="#work" className="hover:text-[#111111] transition-colors">Work</a>
-                <a href="#competencies" className="hover:text-[#111111] transition-colors">Disciplines</a>
-                <a href="#about" className="hover:text-[#111111] transition-colors">About</a>
+                <a
+                  href="#work"
+                  className={`transition-colors relative py-1 ${
+                    activeSection === "work" ? "text-[#015870] font-semibold" : "hover:text-[#111111]"
+                  }`}
+                >
+                  Work
+                  {activeSection === "work" && (
+                    <motion.span
+                      layoutId="nav-underline"
+                      className="absolute left-0 right-0 -bottom-0.5 h-[2px] bg-[#015870] rounded-full"
+                    />
+                  )}
+                </a>
+                <a
+                  href="#competencies"
+                  className={`transition-colors relative py-1 ${
+                    activeSection === "competencies" ? "text-[#015870] font-semibold" : "hover:text-[#111111]"
+                  }`}
+                >
+                  Disciplines
+                  {activeSection === "competencies" && (
+                    <motion.span
+                      layoutId="nav-underline"
+                      className="absolute left-0 right-0 -bottom-0.5 h-[2px] bg-[#015870] rounded-full"
+                    />
+                  )}
+                </a>
+                <a
+                  href="#about"
+                  className={`transition-colors relative py-1 ${
+                    activeSection === "about" ? "text-[#015870] font-semibold" : "hover:text-[#111111]"
+                  }`}
+                >
+                  About
+                  {activeSection === "about" && (
+                    <motion.span
+                      layoutId="nav-underline"
+                      className="absolute left-0 right-0 -bottom-0.5 h-[2px] bg-[#015870] rounded-full"
+                    />
+                  )}
+                </a>
                 <a href="https://github.com/JamesLuceres" target="_blank" rel="noopener noreferrer" className="hover:text-[#111111] transition-colors flex items-center gap-1">
                   <span>GitHub</span>
                   <ExternalLink className="w-3 h-3 text-[#888888]" />
@@ -294,7 +427,13 @@ function App() {
           <section className="pt-0 md:pt-1">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
               {/* Left Column (7 cols) */}
-              <div className="lg:col-span-7 text-center md:text-left">
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                variants={fadeUpVariant}
+                custom={0}
+                className="lg:col-span-7 text-center md:text-left"
+              >
                 {/* Top Kiln-style Announcement Pill */}
                 <div className="inline-flex items-center gap-2 p-1 pr-4 rounded-full bg-[#111111] text-white text-xs mb-6 shadow-kiln mx-auto md:mx-0">
                   <span className="px-2.5 py-0.5 rounded-full bg-[#015870] text-white font-mono-code text-[11px] font-medium tracking-wide">
@@ -365,10 +504,16 @@ function App() {
                     <LinkedinIcon className="w-4 h-4 text-[#015870]" />
                   </a>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Right Column (5 cols) - Framed Profile & Blueprint Card */}
-              <div className="lg:col-span-5">
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                variants={fadeUpVariant}
+                custom={0.12}
+                className="lg:col-span-5"
+              >
                 <div className="border border-[#D6D4CD] rounded-3xl bg-white p-6 shadow-kiln relative overflow-hidden">
                   <div className="flex items-center justify-between border-b border-[#EEEEEE] pb-4 mb-5">
                     <div className="flex items-center gap-2">
@@ -420,40 +565,49 @@ function App() {
                     </div>
                   </div>
 
-                  {/* Mini Terminal Box */}
+                  {/* Mini Terminal Box with Typewriter */}
                   <div className="p-3 rounded-xl bg-[#111111] text-white font-mono-code text-[11px] space-y-1">
                     <div className="text-emerald-400">$ developer.current_role</div>
-                    <div className="text-neutral-300">"Associate Solutions Engineer @ BrainCX AI (Oct 2026 – Present)"</div>
+                    <div className="text-neutral-300 min-h-[1.25rem]">
+                      {typedRole}
+                      <span className="inline-block w-1.5 h-3.5 bg-emerald-400 ml-0.5 align-middle animate-pulse" />
+                    </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
 
-            {/* Blueprint Proof Strip (Hairline Grid) */}
-            <div className="mt-8 md:mt-10 border border-[#D6D4CD] rounded-2xl bg-white shadow-kiln overflow-hidden">
+            {/* Blueprint Proof Strip (Hairline Grid with Staggered Reveal) */}
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.25 }}
+              variants={staggerContainer}
+              className="mt-8 md:mt-10 border border-[#D6D4CD] rounded-2xl bg-white shadow-kiln overflow-hidden"
+            >
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-[#E0DED7]">
-                <div className="p-6 flex flex-col justify-between">
+                <motion.div variants={staggerItem} className="p-6 flex flex-col justify-between">
                   <span className="font-mono-code text-[11px] text-[#888888] uppercase tracking-wider mb-2">01 / Current Position</span>
                   <div className="font-display font-bold text-sm text-[#111111]">Associate Solutions Engineer</div>
                   <div className="text-xs text-[#666666] mt-0.5">BrainCX AI (Oct 2026 – Present)</div>
-                </div>
-                <div className="p-6 flex flex-col justify-between">
+                </motion.div>
+                <motion.div variants={staggerItem} className="p-6 flex flex-col justify-between">
                   <span className="font-mono-code text-[11px] text-[#888888] uppercase tracking-wider mb-2">02 / Degree & Alma Mater</span>
                   <div className="font-display font-bold text-sm text-[#111111]">B.S. Computer Science</div>
                   <div className="text-xs text-[#666666] mt-0.5">University of the Philippines Tacloban</div>
-                </div>
-                <div className="p-6 flex flex-col justify-between">
+                </motion.div>
+                <motion.div variants={staggerItem} className="p-6 flex flex-col justify-between">
                   <span className="font-mono-code text-[11px] text-[#888888] uppercase tracking-wider mb-2">03 / Primary Stack</span>
                   <div className="font-display font-bold text-sm text-[#111111]">Python, Django, Vue 3, PostgreSQL</div>
                   <div className="text-xs text-[#666666] mt-0.5">Django Channels, Quasar, REST APIs</div>
-                </div>
-                <div className="p-6 flex flex-col justify-between">
+                </motion.div>
+                <motion.div variants={staggerItem} className="p-6 flex flex-col justify-between">
                   <span className="font-mono-code text-[11px] text-[#888888] uppercase tracking-wider mb-2">04 / Credentials</span>
                   <div className="font-display font-bold text-sm text-[#111111]">Google AI Professional</div>
                   <div className="text-xs text-[#666666] mt-0.5">ID: 85DII1CM1ZI0 (Aug 2026)</div>
-                </div>
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
           </section>
 
           {/* SELECTED WORK (FRAMED BENTO SECTION) */}
@@ -492,7 +646,14 @@ function App() {
             {/* Bento Grid */}
             <div className="space-y-6">
               {/* FEATURED HERO CARD: Nichole Agrivet POS & Inventory */}
-              <div className="border border-[#D6D4CD] rounded-3xl bg-white p-6 sm:p-8 md:p-12 shadow-kiln hover:shadow-lg transition-all duration-300">
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.18 }}
+                variants={fadeUpVariant}
+                custom={0}
+                className="border border-[#D6D4CD] rounded-3xl bg-white p-6 sm:p-8 md:p-12 shadow-kiln hover:shadow-lg transition-all duration-300"
+              >
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                   <div className="lg:col-span-7 space-y-5">
                     <div className="flex items-center gap-2 flex-wrap">
@@ -552,32 +713,31 @@ function App() {
                   </div>
 
                   <div className="lg:col-span-5">
-                    <div 
+                    <ParallaxPreview
+                      src={PROJECTS[0].image}
+                      alt={PROJECTS[0].title}
                       onClick={() => setActiveProject(PROJECTS[0])}
-                      className="relative group rounded-2xl overflow-hidden border border-[#D6D4CD] bg-[#F7F7F5] cursor-pointer"
-                    >
-                      <img
-                        src={PROJECTS[0].image}
-                        alt={PROJECTS[0].title}
-                        className="w-full h-auto aspect-[16/10] object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                      />
-                      <span className="absolute bottom-3 right-3 px-3 py-1 rounded-full bg-[#111111]/85 backdrop-blur-sm text-white text-[11px] font-mono-code font-medium shadow-sm">
-                        6 Screens • Click to preview
-                      </span>
-                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <span className="px-4 py-2 rounded-full bg-white text-[#111111] text-xs font-semibold shadow-lg">
-                          Click to inspect 6 screens & architecture
-                        </span>
-                      </div>
-                    </div>
+                      badgeText="6 Screens • Click to preview"
+                      overlayText="Click to inspect 6 screens & architecture"
+                      className="w-full h-auto aspect-[16/10] object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                    />
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
               {/* DUAL ASYMMETRIC BENTO CARDS */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.18 }}
+                variants={staggerContainer}
+                className="grid grid-cols-1 md:grid-cols-2 gap-6"
+              >
                 {/* Card 2: ChatPay */}
-                <div className="border border-[#D6D4CD] rounded-3xl bg-white p-6 sm:p-8 shadow-kiln flex flex-col justify-between hover:shadow-lg transition-all duration-300">
+                <motion.div
+                  variants={staggerItem}
+                  className="border border-[#D6D4CD] rounded-3xl bg-white p-6 sm:p-8 shadow-kiln flex flex-col justify-between hover:shadow-lg transition-all duration-300"
+                >
                   <div className="space-y-5">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="px-3 py-1 rounded-full bg-[#EEEEEE] text-[#111111] text-[11px] font-mono-code font-semibold">
@@ -597,16 +757,12 @@ function App() {
                       </p>
                     </div>
 
-                    <div 
+                    <ParallaxPreview
+                      src={PROJECTS[1].image}
+                      alt={PROJECTS[1].title}
                       onClick={() => setActiveProject(PROJECTS[1])}
-                      className="relative rounded-xl overflow-hidden border border-[#D6D4CD] bg-[#F7F7F5] cursor-pointer group"
-                    >
-                      <img
-                        src={PROJECTS[1].image}
-                        alt={PROJECTS[1].title}
-                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    </div>
+                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
 
                     <div className="space-y-2 pt-1">
                       {PROJECTS[1].highlights.slice(0, 3).map((item, idx) => (
@@ -636,10 +792,13 @@ function App() {
                       <ArrowUpRight className="w-3.5 h-3.5" />
                     </button>
                   </div>
-                </div>
+                </motion.div>
 
                 {/* Card 3: TradeLENS AI Inference Platform */}
-                <div className="border border-[#D6D4CD] rounded-3xl bg-[#F2F0E9] p-6 sm:p-8 shadow-kiln flex flex-col justify-between hover:shadow-lg transition-all duration-300">
+                <motion.div
+                  variants={staggerItem}
+                  className="border border-[#D6D4CD] rounded-3xl bg-[#F2F0E9] p-6 sm:p-8 shadow-kiln flex flex-col justify-between hover:shadow-lg transition-all duration-300"
+                >
                   <div className="space-y-5">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="px-3 py-1 rounded-full bg-white text-[#111111] text-[11px] font-mono-code font-semibold border border-[#D6D4CD]">
@@ -659,16 +818,12 @@ function App() {
                       </p>
                     </div>
 
-                    <div 
+                    <ParallaxPreview
+                      src={PROJECTS[2].image}
+                      alt={PROJECTS[2].title}
                       onClick={() => setActiveProject(PROJECTS[2])}
-                      className="rounded-xl overflow-hidden border border-[#DDD9CE] bg-white cursor-pointer group"
-                    >
-                      <img
-                        src={PROJECTS[2].image}
-                        alt={PROJECTS[2].title}
-                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    </div>
+                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
 
                     <div className="space-y-2 pt-1">
                       {PROJECTS[2].highlights.slice(0, 3).map((item, idx) => (
@@ -698,11 +853,18 @@ function App() {
                       <ArrowUpRight className="w-3.5 h-3.5" />
                     </button>
                   </div>
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
 
               {/* CARD 4: Division Information Management System */}
-              <div className="border border-[#D6D4CD] rounded-3xl bg-white p-6 sm:p-8 shadow-kiln hover:shadow-lg transition-all duration-300">
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
+                variants={fadeUpVariant}
+                custom={0.05}
+                className="border border-[#D6D4CD] rounded-3xl bg-white p-6 sm:p-8 shadow-kiln hover:shadow-lg transition-all duration-300"
+              >
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
                   <div className="md:col-span-8 space-y-4">
                     <div className="flex items-center gap-2 flex-wrap">
@@ -739,19 +901,15 @@ function App() {
                     </div>
                   </div>
                   <div className="md:col-span-4">
-                    <div 
+                    <ParallaxPreview
+                      src={PROJECTS[3].image}
+                      alt={PROJECTS[3].title}
                       onClick={() => setActiveProject(PROJECTS[3])}
-                      className="rounded-2xl overflow-hidden border border-[#D6D4CD] bg-[#F7F7F5] cursor-pointer group"
-                    >
-                      <img
-                        src={PROJECTS[3].image}
-                        alt={PROJECTS[3].title}
-                        className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    </div>
+                      className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </section>
 
@@ -781,10 +939,17 @@ function App() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.18 }}
+              variants={staggerContainer}
+              className="grid grid-cols-1 md:grid-cols-3 gap-6"
+            >
               {COMPETENCIES.map((comp, idx) => (
-                <div 
+                <motion.div 
                   key={idx}
+                  variants={staggerItem}
                   className="border border-[#D6D4CD] rounded-3xl bg-white p-8 shadow-kiln flex flex-col justify-between hover:border-[#CCCCCC] transition-colors"
                 >
                   <div>
@@ -815,12 +980,19 @@ function App() {
                   <div className="pt-8 mt-6 border-t border-[#EEEEEE]/50">
                     <span className="font-mono-code text-[11px] text-[#888888]">Verified Capability</span>
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
 
             {/* Comprehensive Skills Matrix */}
-            <div className="mt-6 border border-[#D6D4CD] rounded-3xl bg-white p-8 shadow-kiln">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={fadeUpVariant}
+              custom={0.08}
+              className="mt-6 border border-[#D6D4CD] rounded-3xl bg-white p-8 shadow-kiln"
+            >
               <div className="text-sm font-display font-bold text-[#111111] mb-6 flex items-center gap-2">
                 <Code className="w-4 h-4 text-[#015870]" />
                 <span>Technical Stack Matrix</span>
@@ -867,7 +1039,7 @@ function App() {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </section>
 
           {/* ABOUT SECTION (Tactile Editorial Bento Card) */}
@@ -885,7 +1057,14 @@ function App() {
               </span>
             </div>
 
-            <div className="border border-[#D6D4CD] rounded-3xl bg-[#F2F0E9] p-8 md:p-14 shadow-kiln">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={fadeUpVariant}
+              custom={0}
+              className="border border-[#D6D4CD] rounded-3xl bg-[#F2F0E9] p-8 md:p-14 shadow-kiln"
+            >
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
                 <div className="lg:col-span-5 space-y-6">
                   <h2 className="font-display font-bold text-3xl sm:text-4xl text-[#111111] tracking-tight leading-tight">
@@ -977,7 +1156,7 @@ function App() {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </section>
 
           {/* CONTACT / CTA SECTION */}
@@ -995,7 +1174,14 @@ function App() {
               </span>
             </div>
 
-            <div className="border border-[#D6D4CD] rounded-3xl bg-white p-8 sm:p-12 md:p-16 shadow-kiln text-center max-w-3xl mx-auto space-y-6">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.25 }}
+              variants={fadeUpVariant}
+              custom={0}
+              className="border border-[#D6D4CD] rounded-3xl bg-white p-8 sm:p-12 md:p-16 shadow-kiln text-center max-w-3xl mx-auto space-y-6"
+            >
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EEEEEE] text-[11px] font-mono-code text-[#444444]">
                 <span className="w-2 h-2 rounded-full bg-[#015870]" />
                 <span>Initiate Conversation</span>
@@ -1059,7 +1245,7 @@ function App() {
                   <span>LinkedIn</span>
                 </a>
               </div>
-            </div>
+            </motion.div>
           </section>
 
         </main>
