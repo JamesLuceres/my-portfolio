@@ -45,33 +45,8 @@ const LinkedinIcon = ({ className = "w-4 h-4" }) => (
 
 const PROJECTS = [
   {
-    id: "chatpay",
-    featured: true,
-    role: "Full-Stack Developer Intern",
-    company: "SciBiz Informatics (2025)",
-    category: "Decentralized Web3 & Real-Time Chat",
-    badge: "Django Channels • BCH CashScript",
-    title: "ChatPay — Decentralized Micro-Payment Chat",
-    githubUrl: "https://github.com/JamesLuceres/ChatPay",
-    subtitle: "Real-time chat platform powered by Bitcoin Cash smart contracts for token-gated rooms and per-message micro-payments.",
-    description: "Engineered during my software engineering internship at SciBiz Informatics. ChatPay combines compiled on-chain CashScript smart contracts with high-throughput ASGI WebSockets and a modern reactive SPA, allowing users to monetize chat rooms and pay fractional satoshis per message seamlessly.",
-    image: chatpayImg,
-    highlights: [
-      "Engineered CashScript smart contracts (UserWallet.cash, RoomCreate.cash) governing token-gated access & per-message satoshi settlements.",
-      "Architected high-concurrency real-time WebSocket communication using Django Channels & ASGI.",
-      "Integrated Node.js Express microservices for on-chain Bitcoin Cash transaction verification and balance queries.",
-      "Deployed a responsive, Telegram-inspired Single Page Application built on Vue 3, Quasar Framework, and Pinia."
-    ],
-    techStack: ["CashScript (BCH)", "Django Channels", "ASGI WebSockets", "Vue 3", "Quasar", "Node.js", "Python", "Pinia"],
-    stats: [
-      { label: "Smart Contracts", val: "CashScript (BCH)" },
-      { label: "Sockets", val: "Django Channels" },
-      { label: "Frontend", val: "Vue 3 / Quasar" }
-    ]
-  },
-  {
     id: "agrivet-pos",
-    featured: false,
+    featured: true,
     role: "Freelance Full-Stack Project",
     company: "Nichole Agrivet (2026)",
     category: "Full-Stack Enterprise & POS",
@@ -100,6 +75,31 @@ const PROJECTS = [
       { label: "Deployment", val: "Web + Android APK" },
       { label: "Architecture", val: "Django REST + Offline" },
       { label: "UI Layer", val: "Vue 3 + Quasar" }
+    ]
+  },
+  {
+    id: "chatpay",
+    featured: false,
+    role: "Full-Stack Developer Intern",
+    company: "SciBiz Informatics (2025)",
+    category: "Decentralized Web3 & Real-Time Chat",
+    badge: "Django Channels • BCH CashScript",
+    title: "ChatPay — Decentralized Micro-Payment Chat",
+    githubUrl: "https://github.com/JamesLuceres/ChatPay",
+    subtitle: "Real-time chat platform powered by Bitcoin Cash smart contracts for token-gated rooms and per-message micro-payments.",
+    description: "Engineered during my software engineering internship at SciBiz Informatics. ChatPay combines compiled on-chain CashScript smart contracts with high-throughput ASGI WebSockets and a modern reactive SPA, allowing users to monetize chat rooms and pay fractional satoshis per message seamlessly.",
+    image: chatpayImg,
+    highlights: [
+      "Engineered CashScript smart contracts (UserWallet.cash, RoomCreate.cash) governing token-gated access & per-message satoshi settlements.",
+      "Architected high-concurrency real-time WebSocket communication using Django Channels & ASGI.",
+      "Integrated Node.js Express microservices for on-chain Bitcoin Cash transaction verification and balance queries.",
+      "Deployed a responsive, Telegram-inspired Single Page Application built on Vue 3, Quasar Framework, and Pinia."
+    ],
+    techStack: ["CashScript (BCH)", "Django Channels", "ASGI WebSockets", "Vue 3", "Quasar", "Node.js", "Python", "Pinia"],
+    stats: [
+      { label: "Smart Contracts", val: "CashScript (BCH)" },
+      { label: "Sockets", val: "Django Channels" },
+      { label: "Frontend", val: "Vue 3 / Quasar" }
     ]
   },
   {
@@ -254,16 +254,16 @@ function App() {
                   Vall James Luceres
                 </span>
                 <span className="text-[11px] text-[#666666] font-mono-code">
-                  Full-Stack Software Engineer
+                  Associate Solutions Engineer @ BrainCX AI
                 </span>
               </div>
             </a>
 
-            {/* Navigation items & Availability Status */}
+            {/* Navigation items & Employment Status */}
             <div className="flex items-center gap-6">
               <div className="hidden lg:flex items-center gap-2 px-3 py-1 rounded-full bg-[#EEEEEE] border border-[#D6D4CD] text-[12px] font-mono-code text-[#444444]">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Available for roles</span>
+                <span>Associate Solutions Engineer @ BrainCX AI</span>
               </div>
 
               <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-[#555555]">
@@ -315,7 +315,7 @@ function App() {
                 </h1>
                 
                 <p className="text-base sm:text-lg text-[#555555] leading-relaxed max-w-xl mb-8 mx-auto md:mx-0">
-                  Full-stack software engineer and Computer Science graduate from UP Tacloban. Experienced in building high-concurrency real-time WebSocket engines, decentralized Web3 payment services, and resilient enterprise applications.
+                  Associate Solutions Engineer at <span className="font-semibold text-[#111111]">BrainCX AI</span> and Computer Science graduate from UP Tacloban. Experienced in building conversational AI solutions, high-concurrency real-time WebSocket engines, decentralized Web3 payment services, and resilient enterprise applications.
                 </p>
 
                 {/* CTAs */}
@@ -373,9 +373,9 @@ function App() {
                   <div className="flex items-center justify-between border-b border-[#EEEEEE] pb-4 mb-5">
                     <div className="flex items-center gap-2">
                       <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                      <span className="font-mono-code text-[11px] font-semibold tracking-wider text-[#111111] uppercase">Open To Software Engineering Roles</span>
+                      <span className="font-mono-code text-[11px] font-semibold tracking-wider text-[#111111] uppercase">Associate Solutions Engineer @ BrainCX AI</span>
                     </div>
-                    <span className="font-mono-code text-[11px] text-[#015870] font-semibold">Alum '26</span>
+                    <span className="font-mono-code text-[11px] text-[#015870] font-semibold">Oct 2026 – Present</span>
                   </div>
 
                   <div className="flex gap-4 items-center mb-6">
@@ -389,10 +389,10 @@ function App() {
                         Vall James P. Luceres
                       </div>
                       <div className="font-mono-code text-xs text-[#015870] font-semibold">
-                        Full-Stack Software Engineer
+                        Associate Solutions Engineer • BrainCX AI
                       </div>
                       <div className="text-xs text-[#666666]">
-                        BS Computer Science Graduate
+                        Full-Stack Software Engineer • BS CS (UP Tacloban)
                       </div>
                       <div className="text-[11px] text-[#888888] font-mono-code">
                         Tacloban City, Leyte, Philippines
@@ -403,12 +403,12 @@ function App() {
                   {/* Micro Blueprint Specs Grid */}
                   <div className="grid grid-cols-2 gap-2 text-xs font-mono-code mb-5">
                     <div className="p-2.5 rounded-xl bg-[#F7F7F5] border border-[#EEEEEE]">
-                      <span className="text-[10px] text-[#888888] block uppercase">Education</span>
-                      <span className="font-semibold text-[#111111]">UP Tacloban College</span>
+                      <span className="text-[10px] text-[#888888] block uppercase">Current Role</span>
+                      <span className="font-semibold text-[#111111]">BrainCX AI (2026)</span>
                     </div>
                     <div className="p-2.5 rounded-xl bg-[#F7F7F5] border border-[#EEEEEE]">
-                      <span className="text-[10px] text-[#888888] block uppercase">Certification</span>
-                      <span className="font-semibold text-[#111111]">Google AI Professional</span>
+                      <span className="text-[10px] text-[#888888] block uppercase">Education</span>
+                      <span className="font-semibold text-[#111111]">UP Tacloban College</span>
                     </div>
                     <div className="p-2.5 rounded-xl bg-[#F7F7F5] border border-[#EEEEEE]">
                       <span className="text-[10px] text-[#888888] block uppercase">Core Backend</span>
@@ -422,8 +422,8 @@ function App() {
 
                   {/* Mini Terminal Box */}
                   <div className="p-3 rounded-xl bg-[#111111] text-white font-mono-code text-[11px] space-y-1">
-                    <div className="text-emerald-400">$ developer.status</div>
-                    <div className="text-neutral-300">"Full-Stack Software Engineer • Ready for deployment"</div>
+                    <div className="text-emerald-400">$ developer.current_role</div>
+                    <div className="text-neutral-300">"Associate Solutions Engineer @ BrainCX AI (Oct 2026 – Present)"</div>
                   </div>
                 </div>
               </div>
@@ -433,19 +433,19 @@ function App() {
             <div className="mt-8 md:mt-10 border border-[#D6D4CD] rounded-2xl bg-white shadow-kiln overflow-hidden">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-[#E0DED7]">
                 <div className="p-6 flex flex-col justify-between">
-                  <span className="font-mono-code text-[11px] text-[#888888] uppercase tracking-wider mb-2">01 / Degree & Alma Mater</span>
+                  <span className="font-mono-code text-[11px] text-[#888888] uppercase tracking-wider mb-2">01 / Current Position</span>
+                  <div className="font-display font-bold text-sm text-[#111111]">Associate Solutions Engineer</div>
+                  <div className="text-xs text-[#666666] mt-0.5">BrainCX AI (Oct 2026 – Present)</div>
+                </div>
+                <div className="p-6 flex flex-col justify-between">
+                  <span className="font-mono-code text-[11px] text-[#888888] uppercase tracking-wider mb-2">02 / Degree & Alma Mater</span>
                   <div className="font-display font-bold text-sm text-[#111111]">B.S. Computer Science</div>
                   <div className="text-xs text-[#666666] mt-0.5">University of the Philippines Tacloban</div>
                 </div>
                 <div className="p-6 flex flex-col justify-between">
-                  <span className="font-mono-code text-[11px] text-[#888888] uppercase tracking-wider mb-2">02 / Primary Stack</span>
+                  <span className="font-mono-code text-[11px] text-[#888888] uppercase tracking-wider mb-2">03 / Primary Stack</span>
                   <div className="font-display font-bold text-sm text-[#111111]">Python, Django, Vue 3, PostgreSQL</div>
                   <div className="text-xs text-[#666666] mt-0.5">Django Channels, Quasar, REST APIs</div>
-                </div>
-                <div className="p-6 flex flex-col justify-between">
-                  <span className="font-mono-code text-[11px] text-[#888888] uppercase tracking-wider mb-2">03 / Web3 & Sockets</span>
-                  <div className="font-display font-bold text-sm text-[#111111]">CashScript (BCH) Smart Contracts</div>
-                  <div className="text-xs text-[#666666] mt-0.5">ASGI Real-Time WebSocket Engines</div>
                 </div>
                 <div className="p-6 flex flex-col justify-between">
                   <span className="font-mono-code text-[11px] text-[#888888] uppercase tracking-wider mb-2">04 / Credentials</span>
@@ -491,13 +491,13 @@ function App() {
 
             {/* Bento Grid */}
             <div className="space-y-6">
-              {/* FEATURED HERO CARD: ChatPay (Web3 + WebSockets) */}
+              {/* FEATURED HERO CARD: Nichole Agrivet POS & Inventory */}
               <div className="border border-[#D6D4CD] rounded-3xl bg-white p-6 sm:p-8 md:p-12 shadow-kiln hover:shadow-lg transition-all duration-300">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                   <div className="lg:col-span-7 space-y-5">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="px-3 py-1 rounded-full bg-[#111111] text-white text-[11px] font-mono-code uppercase tracking-wider">
-                        SciBiz Informatics Intern (2025)
+                        {PROJECTS[0].company}
                       </span>
                       <span className="px-3 py-1 rounded-full bg-[#EEEEEE] text-[#015870] text-[11px] font-mono-code font-medium">
                         {PROJECTS[0].badge}
@@ -559,11 +559,14 @@ function App() {
                       <img
                         src={PROJECTS[0].image}
                         alt={PROJECTS[0].title}
-                        className="w-full h-auto aspect-[16/11] object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="w-full h-auto aspect-[16/10] object-cover object-top transition-transform duration-500 group-hover:scale-105"
                       />
+                      <span className="absolute bottom-3 right-3 px-3 py-1 rounded-full bg-[#111111]/85 backdrop-blur-sm text-white text-[11px] font-mono-code font-medium shadow-sm">
+                        6 Screens • Click to preview
+                      </span>
                       <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                         <span className="px-4 py-2 rounded-full bg-white text-[#111111] text-xs font-semibold shadow-lg">
-                          Click to inspect architecture
+                          Click to inspect 6 screens & architecture
                         </span>
                       </div>
                     </div>
@@ -573,7 +576,7 @@ function App() {
 
               {/* DUAL ASYMMETRIC BENTO CARDS */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Card 2: Nichole Agrivet POS & Inventory */}
+                {/* Card 2: ChatPay */}
                 <div className="border border-[#D6D4CD] rounded-3xl bg-white p-6 sm:p-8 shadow-kiln flex flex-col justify-between hover:shadow-lg transition-all duration-300">
                   <div className="space-y-5">
                     <div className="flex items-center gap-2 flex-wrap">
@@ -601,11 +604,8 @@ function App() {
                       <img
                         src={PROJECTS[1].image}
                         alt={PROJECTS[1].title}
-                        className="w-full h-48 object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
                       />
-                      <span className="absolute bottom-2.5 right-2.5 px-2.5 py-1 rounded-full bg-[#111111]/85 backdrop-blur-sm text-white text-[10px] font-mono-code font-medium shadow-sm">
-                        6 Screens • Click to preview
-                      </span>
                     </div>
 
                     <div className="space-y-2 pt-1">
@@ -901,16 +901,16 @@ function App() {
                     />
                     <div className="w-full space-y-2 text-xs font-mono-code text-[#555555]">
                       <div className="flex justify-between">
-                        <span className="text-[#888888]">Status:</span>
-                        <span className="font-semibold text-[#015870]">Full-Stack Engineer</span>
+                        <span className="text-[#888888]">Current Role:</span>
+                        <span className="font-semibold text-[#015870]">Assoc. Solutions Engineer</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-[#888888]">Company:</span>
+                        <span className="font-semibold text-[#111111]">BrainCX AI (Oct 2026)</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-[#888888]">Degree:</span>
-                        <span className="font-semibold text-[#111111]">BS Computer Science</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-[#888888]">Alma Mater:</span>
-                        <span className="font-semibold text-[#111111]">UP Tacloban (2026)</span>
+                        <span className="font-semibold text-[#111111]">BS CS • UP Tacloban ’26</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-[#888888]">Certification:</span>
@@ -937,10 +937,10 @@ function App() {
 
                 <div className="lg:col-span-7 space-y-5 text-sm sm:text-base text-[#444444] leading-relaxed">
                   <p>
-                    I am a Full-Stack Software Engineer and Computer Science graduate from the University of the Philippines Tacloban College. My work centers on building dependable, modular software architectures—ranging from high-concurrency real-time WebSocket systems and on-chain decentralized smart contracts, to normalized database engines and quantitative deep learning models.
+                    I am an <span className="font-semibold text-[#111111]">Associate Solutions Engineer at BrainCX AI</span> (Oct 2026 – Present) and a Computer Science graduate from the University of the Philippines Tacloban College. My work centers on engineering conversational AI solutions and dependable full-stack software architectures—ranging from high-concurrency real-time WebSocket systems and on-chain decentralized smart contracts, to normalized database engines and quantitative deep learning models.
                   </p>
                   <p>
-                    During my software engineering internship at SciBiz Informatics, I engineered CashScript smart contracts on Bitcoin Cash to govern token-gated communication and satoshi micro-payments, coupled with high-concurrency Django Channels WebSocket engines. As a freelance developer, I developed and shipped the Nichole Agrivet POS & Inventory Management System to production, solving real business operational challenges in inventory conversion and credit tracking.
+                    As a freelance full-stack engineer, I architected and shipped the <span className="font-semibold text-[#111111]">Nichole Agrivet POS & Inventory Management System</span> across web and standalone Android tablets (Capacitor APK), solving retail operational challenges in dual-unit stock conversion and credit ledger tracking. Previously, during my software engineering internship at SciBiz Informatics, I engineered CashScript smart contracts on Bitcoin Cash to govern token-gated communication and satoshi micro-payments, coupled with high-concurrency Django Channels WebSocket engines.
                   </p>
                   <p>
                     I am proficient across Python, JavaScript, Vue 3, Django REST Framework, and PostgreSQL, with a Google AI Professional Certification covering prompt engineering, AI-assisted app building, and workflow automation.
@@ -991,7 +991,7 @@ function App() {
                 <span>Contact & Communication</span>
               </div>
               <span className="font-mono-code text-[11px] text-emerald-700 bg-emerald-100/70 border border-emerald-200 px-2.5 py-0.5 rounded-full font-medium">
-                ● AVAILABLE IMMEDIATELY
+                ● ASSOCIATE SOLUTIONS ENGINEER @ BRAINCX AI
               </span>
             </div>
 
@@ -1007,7 +1007,7 @@ function App() {
               </h2>
 
               <p className="text-sm sm:text-base text-[#666666] max-w-lg mx-auto leading-relaxed">
-                I am currently open to full-stack, backend, Web3, and software engineering opportunities. Let's discuss how my experience can contribute to your engineering team.
+                Always open to connecting on software architecture, conversational AI solutions, full-stack engineering, and technical collaborations. Feel free to reach out directly via email or LinkedIn.
               </p>
 
               {/* Actions */}
@@ -1070,7 +1070,7 @@ function App() {
             <div className="flex items-center gap-3">
               <span className="font-display font-bold text-[#111111]">Vall James P. Luceres</span>
               <span className="text-[#CCCCCC]">/</span>
-              <span className="font-mono-code">Full-Stack Software Engineer</span>
+              <span className="font-mono-code">Associate Solutions Engineer @ BrainCX AI</span>
             </div>
 
             <div className="font-mono-code text-[11px] text-[#888888] flex items-center gap-4">
